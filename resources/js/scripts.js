@@ -31,16 +31,47 @@ for (let i=0; i<data.length; ++i){
 const cart = [ ]
 
 function addItem(name, price){
-    const item = {name: name, price: price, qty: 1}
+    for (let i = 0; i < cart.length; i++){
+        if (cart[i].name === name){
+            cart[i].qty++
+            return
+        }
+    }
+    const item = {name, price, qty: 1}
     cart.push(item)
 }
 
-function showItems(){
-    console.log(`You have ${cart.length} items in your cart.`)
+function showCart(){
+
+    console.log(`You have ${getQty()} items in your cart.`)
+
     for (let i = 0; i < cart.length; i++){
-        console.log(cart[i])
+        console.log(` - ${cart[i].name} ${cart[i].price} x ${cart[i].qty}`)
     }
+
+
+    console.log(`Total in cart $${getTotal()}`)
 }
+
+function getQty(){
+    let qty = 0
+    for (let i = 0; i < cart.length; i++){
+        qty += cart[i].qty
+    }
+    return qty
+}
+
+function getTotal(){
+    let total = 0
+    for (let i = 0; i < cart.length; i++){
+        total += cart[i].price * cart[i].qty
+    }
+    return total.toFixed(2)
+}
+
 addItem('apple', 0.99)
-addItem('we', 999.99)
-showItems()
+addItem('weed', 999.99)
+addItem('weed', 999.99)
+addItem('onion', 2.99)
+addItem('apple', 0.99)
+showCart()
