@@ -34,16 +34,73 @@ for (let i=0; i<data.length; ++i){
 
 const cart = [ ]
 
+//Handle Change events on update input
+itemList.onchange = function(e){
+    if (e.target && e.target.classList.contains('update')){
+        const name = e.target.dataset.name
+        const qty = parseInt(e.target.value)
+        updateCart(name, qty)
+    }
+}
+
+//Handle clicks on list
+itemList.onclick = function(e){
+    // console.log("Clicked List!")
+    // console.log(e.target)
+    if (e.target && e.target.classList.contains('remove')){
+        const name = e.target.dataset.name
+        removeItem(name)
+    } else if (e.target && e.target.classList.contains('add-one')){
+        const name = e.target.dataset.name
+        addItem(name)
+    } else if (e.target && e.target.classList.contains('remove-one')){
+        const name = e.target.dataset.name
+        removeItem(name, 1)
+    }
+}
+
 //Adds item to cart
 function addItem(name, price){
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
             cart[i].qty++
+            showCart()
             return
         }
     }
     const item = {name, price, qty: 1}
-    cart.push(item)
+    cart.push(item) 
+    showCart()
+}
+
+//Remove item from cart
+function removeItem(name, qty = 0){
+    for (let i = 0; i < cart.length; i++){
+        if (cart[i].name === name){
+            if (qty > 0) {
+                cart [i].qty -= 1
+            }
+            if (cart[i].qty < 1 || qty === 0){
+                cart.splice(i, 1)
+            }
+            showCart()
+            return
+        }
+    }
+}
+
+function updateCart(name,qty) {
+    for (let i = 0; i < cart.length; i++){
+        if (cart[i].name === name){
+            if (qty < 1) {
+                removeItem(name)
+                return
+            }
+            cart[i].qty = qty
+            showCart()
+            return
+        }
+    }
 }
 
 //Shows contents of cart
@@ -56,15 +113,25 @@ function showCart(){
     for (let i = 0; i < cart.length; i++){
         //console.log(` - ${cart[i].name} $${cart[i].price} x ${cart[i].qty}`)
         const {name, price, qty} = cart[i]
-        itemStr += `<li>${name} $${price} x ${qty} = $${price * qty}</li>`
+        itemStr += `<li>
+            ${name} $${price} x ${qty} = $${qty * price}
+            <button class="remove" data-name="${name}">Remove</button>
+            <button class="add-one" data-name="${name}"> + </button>
+            <button class="remove-one" data-name="${name}"> - </button>
+            <input class="update" type="number" data-name="${name}">
+        </li>`
     }
-    const all_items_button = Array.from(document.querySelectorAll("button"))
-    all_items_button.forEach(elt => elt.addEventListener('click', () => {
-    addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
-    showItems()
-    }))
-    itemList.innerHTML = itemStr
 
+    //This block of code is questionable
+    const all_items_button = Array.from(document.querySelectorAll("button"))
+    console.log(all_items_button)
+    all_items_button.forEach(elt => elt.addEventListener('click', () => {
+        addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
+        showCart()
+      }))
+
+    itemList.innerHTML = itemStr
+    
     //console.log(`Total in cart $${getTotal()}`)
     cartTotal.innerHTML = `Total in cart $${getTotal()}`
 }
@@ -87,26 +154,12 @@ function getTotal(){
     return total.toFixed(2)
 }
 
-function removeItem(name, qty = 0){
-    for (let i = 0; i < cart.length; i++){
-        if (cart[i].name === name){
-            if (qty > 0) {
-                cart [i].qty -= 1
-            }
-            if (cart[i].qty < 1 || qty === 0){
-                cart.splice(i, 1)
-            }
-            return
-        }
-    }
-}
-
 //test code
-addItem('apple', 0.99)
-addItem('weed', 999.99)
-addItem('weed', 999.99)
-addItem('onion', 2.99)
-addItem('apple', 0.99)
-removeItem('apple', 1)
-removeItem('weed')
+// addItem('apple', 0.99)
+// addItem('weed', 999.99)
+// addItem('weed', 999.99)
+// addItem('onion', 2.99)
+// addItem('apple', 0.99)
+// removeItem('apple', 1)
+// removeItem('weed')
 showCart()
