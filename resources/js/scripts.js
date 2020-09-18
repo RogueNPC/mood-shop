@@ -30,6 +30,7 @@ for (let i=0; i<data.length; ++i){
 
 const cart = [ ]
 
+//Adds item to cart
 function addItem(name, price){
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
@@ -41,6 +42,7 @@ function addItem(name, price){
     cart.push(item)
 }
 
+//Shows contents of cart
 function showCart(){
 
     console.log(`You have ${getQty()} items in your cart.`)
@@ -53,6 +55,7 @@ function showCart(){
     console.log(`Total in cart $${getTotal()}`)
 }
 
+//Calculate qty
 function getQty(){
     let qty = 0
     for (let i = 0; i < cart.length; i++){
@@ -61,6 +64,7 @@ function getQty(){
     return qty
 }
 
+//Calculate total cost
 function getTotal(){
     let total = 0
     for (let i = 0; i < cart.length; i++){
@@ -69,9 +73,26 @@ function getTotal(){
     return total.toFixed(2)
 }
 
+function removeItem(name, qty = 0){
+    for (let i = 0; i < cart.length; i++){
+        if (cart[i].name === name){
+            if (qty > 0) {
+                cart [i].qty -= 1
+            }
+            if (cart[i].qty < 1 || qty === 0){
+                cart.splice(i, 1)
+            }
+            return
+        }
+    }
+}
+
+//test code
 addItem('apple', 0.99)
 addItem('weed', 999.99)
 addItem('weed', 999.99)
 addItem('onion', 2.99)
 addItem('apple', 0.99)
+removeItem('apple', 1)
+removeItem('weed')
 showCart()
