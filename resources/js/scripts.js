@@ -61,15 +61,17 @@ itemList.onclick = function(e){
 
 //Adds item to cart
 function addItem(name, price){
+    //console.log("addItem function called")
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
             cart[i].qty++
+            //console.log("add 1")
             showCart()
             return
         }
     }
     const item = {name, price, qty: 1}
-    cart.push(item) 
+    cart.push(item)
     showCart()
 }
 
@@ -78,7 +80,7 @@ function removeItem(name, qty = 0){
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
             if (qty > 0) {
-                cart [i].qty -= 1
+                cart[i].qty--
             }
             if (cart[i].qty < 1 || qty === 0){
                 cart.splice(i, 1)
@@ -93,10 +95,17 @@ function updateCart(name,qty) {
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
             if (qty < 1) {
-                removeItem(name)
-                return
+                cart[i].qty--
             }
-            cart[i].qty = qty
+            else if (qty === 1) {
+                cart[i].qty++
+            }
+            else{
+                cart[i].qty = qty
+            }
+            if (cart [i].qty < 1){
+                removeItem(name)
+            }
             showCart()
             return
         }
@@ -105,8 +114,7 @@ function updateCart(name,qty) {
 
 //Shows contents of cart
 function showCart(){
-
-    //console.log(`You have ${getQty()} items in your cart.`)
+    console.log(`You have ${getQty()} items in your cart.`)
     cartQty.innerHTML = `You have ${getQty()} items in your cart.`
 
     let itemStr = ''
@@ -122,12 +130,13 @@ function showCart(){
         </li>`
     }
 
-    //This block of code is questionable
     const all_items_button = Array.from(document.querySelectorAll("button"))
     //console.log(all_items_button)
     all_items_button.forEach(elt => elt.addEventListener('click', () => {
+        // addItem function called multiple times problem here?
+        // console.log("click!")
         addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
-        showCart()
+        //showCart()
       }))
 
     itemList.innerHTML = itemStr
@@ -156,10 +165,10 @@ function getTotal(){
 
 //test code
 // addItem('apple', 0.99)
-// addItem('weed', 999.99)
-// addItem('weed', 999.99)
+// addItem('silver', 999.99)
+// addItem('silver', 999.99)
 // addItem('onion', 2.99)
 // addItem('apple', 0.99)
 // removeItem('apple', 1)
-// removeItem('weed')
+// removeItem('silver')
 showCart()
