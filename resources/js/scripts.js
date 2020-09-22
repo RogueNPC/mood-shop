@@ -61,17 +61,19 @@ itemList.onclick = function(e){
 
 //Adds item to cart
 function addItem(name, price){
-    //console.log("addItem function called")
+    console.log("--> addItem function called")
     for (let i = 0; i < cart.length; i++){
         if (cart[i].name === name){
             cart[i].qty++
-            //console.log("add 1")
+            console.log("--> add 1")
             showCart()
             return
         }
     }
     const item = {name, price, qty: 1}
+    console.log("--> item:",item)
     cart.push(item)
+    console.log("--> cart:",cart)
     showCart()
 }
 
@@ -134,7 +136,7 @@ function showCart(){
     //console.log(all_items_button)
     all_items_button.forEach(elt => elt.addEventListener('click', () => {
         // addItem function called multiple times problem here?
-        // console.log("click!")
+        // console.log("--> click!")
         addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
         //showCart()
       }))
