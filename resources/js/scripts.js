@@ -115,6 +115,15 @@ function updateCart(name,qty) {
 }
 
 //Shows contents of cart
+const all_items_button = Array.from(document.querySelectorAll("button"))
+//console.log(all_items_button)
+all_items_button.forEach(elt => elt.addEventListener('click', () => {
+    // addItem function called multiple times problem here?
+    // console.log("--> click!")
+    addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
+    //showCart()
+  }))
+
 function showCart(){
     console.log(`You have ${getQty()} items in your cart.`)
     cartQty.innerHTML = `You have ${getQty()} items in your cart.`
@@ -131,15 +140,6 @@ function showCart(){
             <input class="update" type="number" data-name="${name}">
         </li>`
     }
-
-    const all_items_button = Array.from(document.querySelectorAll("button"))
-    //console.log(all_items_button)
-    all_items_button.forEach(elt => elt.addEventListener('click', () => {
-        // addItem function called multiple times problem here?
-        // console.log("--> click!")
-        addItem(elt.getAttribute('id'), elt.getAttribute('data-price'))
-        //showCart()
-      }))
 
     itemList.innerHTML = itemStr
     
