@@ -141,6 +141,9 @@ function showCart(){
         </li>`
     }
 
+    //event listener would clone itself over and over again because it was inside the showCart() function [I mean just imagine...]
+    //it has moved to outside the showCart() function
+
     itemList.innerHTML = itemStr
     
     //console.log(`Total in cart $${getTotal()}`)
